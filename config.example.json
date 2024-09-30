@@ -1,0 +1,56 @@
+{
+	"debug": true,
+	"mqtt": {
+		"host": "mqtt://localhost:1883"
+	},
+	"db": {
+		"host": "localhost",
+		"user": "",
+		"password": "",
+		"database": "mqtt_events"
+	},
+	"globalRules": [
+		{
+			"action": "ignore",
+			"labels": ["bird"]
+		}
+	],
+	"detectors": [
+		{
+			"identifier": "/location/area/detection",
+			"rules": [
+				{
+					"action": "log",
+					"labels": ["person"]
+				},
+				{
+					"action": "report",
+					"labels": ["person"],
+					"confidenceAbove": 0.3,
+					"timeframe": [
+						{
+							"from": {
+								"hour": 21,
+								"minute": 0
+							},
+							"to": {
+								"hour": 23,
+								"minute": 59
+							}
+						},
+						{
+							"from": {
+								"hour": 0,
+								"minute": 0
+							},
+							"to": {
+								"hour": 7,
+								"minute": 59
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
