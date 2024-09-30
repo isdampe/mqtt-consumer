@@ -2,6 +2,7 @@ import { connect, MqttClient } from "mqtt";
 import MqttConfig from "./MqttConfig";
 import { MqttGetMatchedRules } from "./MqttRule";
 import { MqttDb } from "./MqttDb";
+import { MqttReportEvent } from "./MqttReport";
 
 class MqttConsumer {
 	private config: MqttConsumer.Config.Config;
@@ -98,6 +99,7 @@ class MqttConsumer {
 					break;
 				case "report":
 					this.debug(`Reporting message for ${payload.identifier}`);
+					MqttReportEvent(payload);
 					break;
 			}
 

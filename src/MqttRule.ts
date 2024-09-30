@@ -40,11 +40,15 @@ export function MqttGetMatchedRules(payload: MqttConsumer.Message.Payload, confi
 
 	// Check global rules
 	for (const rule of config.globalRules) {
-		if (checkRule(rule)) matchingRules.push(rule);
+		if (checkRule(rule)) 
+			matchingRules.push(rule);
 	}
 
 	// Check detector rules
 	for (const detector of config.detectors) {
+		if (detector.identifier !== payload.identifier)
+			continue;
+
 		for (const rule of detector.rules) {
 			if (checkRule(rule)) matchingRules.push(rule);
 		}

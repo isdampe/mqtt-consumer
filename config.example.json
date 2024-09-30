@@ -4,6 +4,10 @@
 	"mqtt": {
 		"host": "mqtt://localhost:1883"
 	},
+	"reportServer": {
+		"host": "http://10.8.0.1:3008",
+		"apiKey": ""
+	},
 	"db": {
 		"host": "localhost",
 		"user": "",

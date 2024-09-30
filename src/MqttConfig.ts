@@ -1,6 +1,6 @@
 import fs from "fs";
 
-let MqttConfig = JSON.parse(fs.readFileSync("./config.json", "utf8"));
+let MqttConfig: MqttConsumer.Config.Config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 
 function validateConfig(input: any): string[] {
 	const errors: string[] = [];

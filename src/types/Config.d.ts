@@ -5,6 +5,10 @@ declare namespace MqttConsumer.Config {
 		mqtt: {
 			host: string;
 		};
+		reportServer: {
+			host: string;
+			apiKey: string;
+		};
 		retainLogsForDays: number;
 		db: {
 			host: string;
