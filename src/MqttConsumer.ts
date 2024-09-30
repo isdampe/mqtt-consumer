@@ -91,7 +91,10 @@ class MqttConsumer {
 				case "log":
 					this.debug(`Logging message for ${payload.identifier}`);
 					this.debug(JSON.stringify(payload, null, 2));
-					this.db.logEvent(payload);
+					this.db.logEvent(payload)
+						.catch(err => {
+							this.log(`Error logging event: ${err}`);
+						});
 					break;
 				case "report":
 					this.debug(`Reporting message for ${payload.identifier}`);
