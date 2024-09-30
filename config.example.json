@@ -1,5 +1,6 @@
 {
 	"debug": true,
+	"retainLogsForDays": 30,
 	"mqtt": {
 		"host": "mqtt://localhost:1883"
 	},

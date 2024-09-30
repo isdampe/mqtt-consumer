@@ -14,6 +14,20 @@ export class MqttDb {
 				database: MqttConfig.db.database
 			}
 		});
+
+		setInterval(() => {
+			// Clean up old events.
+			this.cleanUpOldEvents();
+		}, 1000 * 60 * 10); 
+	}
+
+	async cleanUpOldEvents() {
+		const cutoff = new Date();
+		cutoff.setDate(cutoff.getDate() - MqttConfig.retainLogsForDays);
+
+		await this.db("event")
+			.where("timeCreated", "<", cutoff)
+			.del();
 	}
 
 	async logEvent(event: MqttConsumer.Message.Payload) {

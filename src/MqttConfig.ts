@@ -10,6 +10,10 @@ function validateConfig(input: any): string[] {
 		return errors;
 	}
 
+	if (typeof input.retainLogsForDays !== "number") {
+		errors.push("retainLogsForDays must be a number.");
+	}
+
 	if (typeof input.debug !== "boolean") {
 		errors.push("debug must be a boolean.");
 	}
