@@ -3,15 +3,18 @@ import MqttConfig from "./MqttConfig";
 import { MqttGetMatchedRules } from "./MqttRule";
 import { MqttDb } from "./MqttDb";
 import { MqttReportEvent } from "./MqttReport";
+import { MqttFrameCounter } from "./MqttFrameCounter";
 
 class MqttConsumer {
 	private config: MqttConsumer.Config.Config;
 	private client: MqttClient;
+	private frameCounter: MqttFrameCounter;
 	private db: MqttDb;
 
 	constructor(config: MqttConsumer.Config.Config) {
 		this.config = config;
 		this.db = new MqttDb();
+		this.frameCounter = new MqttFrameCounter();
 		this.client = connect(this.config.mqtt.host);
 		this.client.on("connect", this.onConnect.bind(this));
 		this.client.on("message", this.onMessage.bind(this));
@@ -78,7 +81,13 @@ class MqttConsumer {
 
 	private handleMessage(payload: MqttConsumer.Message.Payload) {
 		this.debug(`Received message for ${payload.identifier}: ${JSON.stringify(payload, null, 2)}`);
-		const matchedRules = MqttGetMatchedRules(payload, this.config);
+
+		this.frameCounter.frameTick({
+			identifier: payload.identifier,
+			labels: [payload.label]
+		});
+
+		const matchedRules = MqttGetMatchedRules(payload, this.config, this.frameCounter);
 		if (matchedRules.length === 0) {
 			this.debug(`No rules matched for ${payload.identifier}`);
 			return;

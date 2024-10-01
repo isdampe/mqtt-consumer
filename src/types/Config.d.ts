@@ -27,6 +27,7 @@ declare namespace MqttConsumer.Config {
 
 	type Rule = {
 		action: "ignore" | "log" | "report";
+		minFrameCount?: number;
 		labels?: string[];
 		priority?: number;
 		confidenceBelow?: number;

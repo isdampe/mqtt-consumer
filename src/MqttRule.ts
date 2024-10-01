@@ -1,4 +1,6 @@
-export function MqttGetMatchedRules(payload: MqttConsumer.Message.Payload, config: MqttConsumer.Config.Config): MqttConsumer.Config.Rule[] {
+import { MqttFrameCounter } from "./MqttFrameCounter";
+
+export function MqttGetMatchedRules(payload: MqttConsumer.Message.Payload, config: MqttConsumer.Config.Config, frameCounter: MqttFrameCounter): MqttConsumer.Config.Rule[] {
 	const matchingRules: MqttConsumer.Config.Rule[] = [];
 
 	const checkTimeframe = (timeframe: MqttConsumer.Config.Timeframe): boolean => {
@@ -30,6 +32,12 @@ export function MqttGetMatchedRules(payload: MqttConsumer.Message.Payload, confi
 	};
 
 	const checkRule = (rule: MqttConsumer.Config.Rule): boolean => {
+		if (rule.minFrameCount) {
+			const frameCount = frameCounter.getFrameCount({ identifier: payload.identifier, label: payload.label });
+			if (frameCount < rule.minFrameCount)
+				return false;
+		}
+
 		if (rule.labels && !rule.labels.includes(payload.label)) return false;
 		if (rule.confidenceBelow !== undefined && payload.confidence >= rule.confidenceBelow) return false;
 		if (rule.confidenceAbove !== undefined && payload.confidence <= rule.confidenceAbove) return false;
